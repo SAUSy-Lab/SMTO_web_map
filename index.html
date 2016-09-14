@@ -1,0 +1,1303 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8' />
+    <title>SMTO Map</title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.23.0/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.23.0/mapbox-gl.css' rel='stylesheet' />
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+
+    <style>
+
+        body {
+        margin:0; padding:0;
+        min-width: 993px;
+        }
+
+        p {
+          font-family: 'Roboto', sans-serif;
+          color: white;
+        }
+
+        #top {
+          height: 75px;
+          background-color: grey;
+          overflow: hidden;
+        }
+
+        #title {
+          height: 75px;
+          width: 320px;
+          float:left;
+          background-color: black;
+
+        }
+        #title p {
+          color: white;
+          padding-left: 21px;
+          line-height: 140%;
+        }
+
+        #buttons {
+          width:calc(100% - 321px);
+          height:75px;
+          float: left;
+          background-color: #202121;
+          border-left: solid 1px grey;
+          min-height: 500px;
+        }
+
+        #mode {
+          height:75px;
+          width: 264px;
+          background-color: grey;
+          float: left;
+          border-right: solid 1px grey;
+        }
+
+        #m_bike, #m_walk, #m_transit, #m_auto, #m_all, #m_title {
+          width: 130px;
+          height: 23px;
+          background-color: black;
+          border-style: solid;
+          border-width: 1px;
+          border-color: darkgrey;
+          float: left;
+          cursor: pointer;
+          opacity: 0.4;
+        }
+        #m_all {
+          opacity: 0.98;
+
+        }
+
+        #m_title {
+          cursor: auto;
+          opacity: 0.8;
+        }
+
+        #m_bike:hover, #m_walk:hover, #m_transit:hover, #m_auto:hover, #m_all:hover {
+          opacity: 0.98;
+        }
+
+        #mode p {
+          margin-top: 5px;
+          margin-left: 8px;
+          padding-left: 0px;
+          margin-right: 0px;
+          padding-right: 0px;
+          font-size: 13px;
+        }
+
+        #m_title p {
+          font-style: italic;
+          font-size: 13px;
+          color: white;
+        }
+
+        #campus {
+          height:75px;
+          width: 396px;
+          background-color: grey;
+          margin-left: 6px;
+          float: left;
+          border-right: solid 1px grey;
+          border-left: solid 1px grey;
+        }
+
+        #campus p {
+          margin-top: 5px;
+          margin-left: 8px;
+          padding-left: 0px;
+          margin-right: 0px;
+          padding-right: 0px;
+          font-size: 13px;
+        }
+
+        #c_utm, #c_utsc, #c_utsg, #c_yorkk, #c_yorkg, #c_title, #c_ryers, #c_ocad, #c_all {
+          width: 130px;
+          height: 23px;
+          background-color: black;
+          border-style: solid;
+          border-width: 1px;
+          border-color: darkgrey;
+          float: left;
+          cursor: pointer;
+          opacity: 0.4;
+        }
+
+        #c_all {
+          opacity: 0.98;
+        }
+
+        #c_utm:hover, #c_utsc:hover, #c_utsg:hover, #c_yorkk:hover, #c_yorkg:hover, #c_title:hover, #c_ryers:hover, #c_ocad:hover, #c_all:hover {
+          opacity: 0.98;
+        }
+
+        #c_title p {
+          font-style: italic;
+          font-size: 13px;
+          color: white;
+        }
+
+        #c_title {
+          cursor: auto;
+          opacity: 0.8;
+        }
+
+        #main {
+          overflow: hidden;
+        }
+
+        #bar {
+          height: calc(100vh - 77px);
+          min-height: 500px;
+          width: 320px;
+          float:left;
+          border-top: solid 2px grey;
+          background-color: #202121
+        }
+
+        #chart_1 {
+          height: 265px;
+          width: 320px;
+        }
+
+        #modebar {
+          width: 320px;
+          height: 85px;
+        }
+
+        #modebar p {
+          padding: 0;
+          margin: 0;
+          font-size: 13px;
+          padding-top: 10px;
+          padding-left: 20px;
+          padding-bottom: 2px;
+        }
+
+        #realbar {
+          width: 210px;
+          height: 20px;
+          margin-left: 20px;
+          border-left: solid 1px white;
+          float: left;
+        }
+        #n {
+          width: 80px;
+          height: 20px;
+          float: left;
+          /*padding-bottom: 12px;*/
+          padding: 0px;
+          margin: 0px;
+          margin-top: -6px;
+        }
+        #n p {
+          opacity: 0.8;
+          font-style: italic;
+          margin-left: -10px;
+        }
+
+
+
+        #rb_auto {
+          width: 16px;
+          height: 18px;
+          border-top: solid 1px white;
+          border-bottom: solid 1px white;
+          border-right: solid 1px white;
+          background-color: #C9C1E2;
+          float: left;
+        }
+        #rb_transit {
+          width: 124px;
+          height: 18px;
+          border-top: solid 1px white;
+          border-bottom: solid 1px white;
+          border-right: solid 1px white;
+          background-color: #FFC5C1;
+          float: left;
+        }
+        #rb_walk {
+          width: 44px;
+          height: 18px;
+          border-top: solid 1px white;
+          border-bottom: solid 1px white;
+          border-right: solid 1px white;
+          background-color: #BEEAFD;
+          float: left;
+        }
+        #rb_bike {
+          width: 16px;
+          height: 18px;
+          border-top: solid 1px white;
+          border-bottom: solid 1px white;
+          border-right: solid 1px white;
+          background-color: #B4E5CA;
+          float: left;
+        }
+        #rb_transit p, #rb_auto p, #rb_bike p, #rb_walk p {
+          text-align:center;
+          margin: 0px;
+          padding: 0px;
+          color: lightgrey;
+          padding-top: 20px;
+          opacity: 0.8;
+        }
+        /*#rb_l {
+          text-align:center;
+          margin: 0px;
+          padding: 0px;
+          color: red;
+          margin-top: -50px;
+        }*/
+
+        #avg_tt, #med_tt {
+          width: 322px;
+          height: 60px;
+        }
+
+        #avg_tt p, #med_tt p{
+          padding: 0;
+          margin: 0;
+          font-size: 13px;
+          padding-top: 10px;
+          padding-left: 20px;
+          padding-bottom: 2px;
+        }
+
+        /* 200 px = 60 mins */
+        #avg_tt_bar {
+          width: 159px;
+          height: 18px;
+          border-top: solid 1px white;
+          border-bottom: solid 1px white;
+          border-right: solid 1px white;
+          border-left: solid 1px white;
+          background-color: white;
+          margin-left: 20px;
+          float: left;
+        }
+
+        #avg_p, #med_p {
+          width: 80px;
+          height: 20px;
+          float: left;
+          /*padding-bottom: 12px;*/
+          padding: 0px;
+          margin: 0px;
+          margin-top: -7px;
+
+        }
+        #avg_p p, #med_p p {
+          opacity: 0.8;
+          margin-left: -11px;
+        }
+
+        #med_tt_bar {
+          width: 140px;
+          height: 18px;
+          border-top: solid 1px white;
+          border-bottom: solid 1px white;
+          border-right: solid 1px white;
+          border-left: solid 1px white;
+          background-color: white;
+          margin-left: 20px;
+          float: left;
+        }
+
+        #d_axis {
+          width: 200px;
+          height: 1px;
+          background-color: lightgrey;
+          margin-left: 20px;
+          float: left;
+          margin-top: -10px;
+        }
+
+        #d_t_axis {
+          width: 200px;
+          height: 5px;
+          margin-left: 20px;
+          float: left;
+          margin-top: -10px;
+          border-left: solid 1px lightgrey;
+        }
+        #tictac {
+          width: 49px;
+          height: 4px;
+          border-right: solid 1px lightgrey;
+          float: left;
+        }
+
+        #routes {
+          width: 322px;
+          height: 300px;
+          opacity: 0;
+          /*background-color: red;*/
+        }
+
+        #routes p {
+          padding: 0;
+          margin: 0;
+          font-size: 13px;
+          padding-top: 14px;
+          padding-left: 20px;
+          padding-bottom: 2px;
+        }
+
+        #ttr {
+          width: 302px;
+          height: 3px;
+          /*background-color: lightgrey;*/
+          margin-left: 20px;
+          float: left;
+        }
+
+        #tictac_r {
+          width: 29px;
+          height: 4px;
+          border-left: solid 1px darkgrey;
+          float: left;
+          opacity: 0.5;
+        }
+
+        #r_1, #r_2, #r_3, #r_4, #r_5, #r_6 {
+          width: 2px;
+          height: 18px;
+          border-top: solid 1px white;
+          border-bottom: solid 1px white;
+          border-right: solid 1px white;
+          border-left: solid 1px white;
+          background-color: lightgrey;
+          margin-left: 20px;
+          float: left;
+        }
+
+        #pr_1, #pr_2, #pr_3, #pr_4, #pr_5, #pr_6 {
+          width: 140px;
+          height: 20px;
+          float: left;
+          /*padding-bottom: 12px;*/
+          padding: 0px;
+          margin: 0px;
+          margin-top: -11px;
+        }
+
+        #r_1_p p, #r_2_p p {
+          opacity: 0.8;
+          margin-left: -12px;
+          float: left;
+          margin-top: -12px;
+          color: black;
+        }
+
+        #pr_1 p, #pr_2 p, #pr_3 p, #pr_4 p, #pr_5 p, #pr_6 p {
+          opacity: 0.8;
+          margin-left: -12px;
+          float: left;
+          color: lightgrey;
+        }
+
+        #route_perc {
+          width: 322px;
+          height: 20px;
+          margin-top: 135px;
+          opacity: 0.8;
+        }
+
+        #map {
+          width:calc(100% - 322px);
+          height:calc(100vh - 77px);
+          float: left;
+          background-color: #f6eff7;
+          border-left: solid 2px grey;
+          min-height: 500px;
+          border-top: solid 2px grey;
+        }
+
+
+
+    </style>
+
+
+</head>
+<body>
+
+<div id="top">
+
+  <div id='title'>
+
+    <p>Travel Patterns to University Campuses<br> in the Toronto Region</p>
+
+
+  </div>
+
+
+
+  <div id='buttons'>
+
+    <div id='mode'>
+
+      <!-- Travel mode buttons -->
+      <div id='m_title'><p>By Travel Mode:</p></div>
+      <div onclick='mode_switch("bike")' id='m_bike'><p>
+        <svg width="10" height="10">
+        <circle cx="5" cy="5" r="5" stroke="grey" stroke-width="1" fill="#B4E5CA"/>
+        </svg>
+        Bike</p>
+      </div>
+      <div onclick='mode_switch("walk")' id='m_walk'><p>
+        <svg width="10" height="10">
+        <circle cx="5" cy="5" r="5" stroke="grey" stroke-width="1" fill="#BEEAFD"/>
+        </svg>
+        Walk</p>
+      </div>
+      <div onclick='mode_switch("transit")' id='m_transit'><p>
+        <svg width="10" height="10">
+        <circle cx="5" cy="5" r="5" stroke="grey" stroke-width="1" fill="#FFC5C1"/>
+        </svg>
+        Transit</p>
+      </div>
+      <div onclick='mode_switch("auto")' id='m_auto'><p>
+        <svg width="10" height="10">
+        <circle cx="5" cy="5" r="5" stroke="grey" stroke-width="1" fill="#C9C1E2"/>
+        </svg>
+        Drive</p>
+      </div>
+      <div onclick='mode_switch("all")' id='m_all'><p>
+        <svg width="10" height="10">
+        <circle cx="5" cy="5" r="5" stroke="grey" stroke-width="1" fill="white" />
+        </svg>
+        All Modes</p>
+      </div>
+
+    </div>
+
+<!-- Campus buttons -->
+    <div id='campus'>
+      <div id='c_title'><p>By Campus:</p></div>
+      <div onclick='campus_switch("YorkK")' id='c_yorkk'><p>York (Keele)</p></div>
+      <div onclick='campus_switch("YorkG")' id='c_yorkg'><p>York (Glendon)</p></div>
+      <div onclick='campus_switch("UTSG")' id='c_utsg'><p>U of T St. George</p></div>
+      <div onclick='campus_switch("UTSC")' id='c_utsc'><p>U of T Scarborough</p></div>
+      <div onclick='campus_switch("UTM")' id='c_utm'><p>U of T Mississauga</p></div>
+      <div onclick='campus_switch("Ryers")' id='c_ryers'><p>Ryerson</p></div>
+      <div onclick='campus_switch("OCAD")' id='c_ocad'><p>OCAD</p></div>
+      <div onclick='campus_switch("all")' id='c_all'><p>All Campuses</p></div>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<div id="main">
+
+  <div id='bar'>
+
+    <div id='modebar'>
+
+      <p> Percent of trips by travel mode:</p>
+
+      <div id='realbar'>
+
+          <div id='rb_auto'><p id='prba'>8%<br>D</p></div>
+          <div id='rb_transit'><p id='prbt'>62%<br>T</p></div>
+          <div id='rb_walk'><p id='prbw'>22%<br>W</p></div>
+          <div id='rb_bike'><p id='prbb'>8%<br>B</p></div>
+
+      </div>
+      <div id='n'>
+      <!-- <p>n = 62420</p> -->
+      </div>
+
+    </div>
+
+    <div id='avg_tt'>
+      <p> Average one-way trip travel time:</p>
+      <div id='avg_tt_bar'></div>
+      <div id='avg_p'><p>47.6 mins</p></div>
+    </div>
+
+    <div id='d_axis'></div>
+    <div id='d_t_axis'>
+      <div id='tictac'></div>
+      <div id='tictac'></div>
+      <div id='tictac'></div>
+      <div id='tictac'></div>
+    </div>
+
+    <div id='med_tt'>
+      <p> Median one-way trip travel time:</p>
+      <div id='med_tt_bar'></div>
+      <div id='med_p'><p>40.2 mins</p></div>
+    </div>
+
+    <div id='d_axis'></div>
+    <div id='d_t_axis'>
+      <div id='tictac'></div>
+      <div id='tictac'></div>
+      <div id='tictac'></div>
+      <div id='tictac'></div>
+    </div>
+
+    <div id='routes'>
+      <p> Critical transit routes:</p>
+
+      <div id="ttr">
+        <div id='tictac_r'></div>
+        <div id='tictac_r'></div>
+        <div id='tictac_r'></div>
+        <div id='tictac_r'></div>
+        <div id='tictac_r'></div>
+        <div id='tictac_r'></div>
+        <div id='tictac_r'></div>
+        <div id='tictac_r'></div>
+        <div id='tictac_r'></div>
+        <div id='tictac_r'></div>
+      </div>
+
+      <div id="r_1"><div id='r_1_p'><p>43% - TTC Line 1</p></div></div><div id="pr_1"> <p> GO Train LE</p></div>
+      <div id="ttr">
+        <div id='tictac_r'></div>
+        <div id='tictac_r'></div>
+        <div id='tictac_r'></div>
+        <div id='tictac_r'></div>
+        <div id='tictac_r'></div>
+        <div id='tictac_r'></div>
+        <div id='tictac_r'></div>
+        <div id='tictac_r'></div>
+        <div id='tictac_r'></div>
+        <div id='tictac_r'></div>
+      </div>
+      <div id="r_2"><div id='r_2_p'><p></p></div></div><div id="pr_2"> <p> GO Train LE</p></div>
+      <div id="ttr">
+        <div id='tictac_r'></div>
+        <div id='tictac_r'></div>
+        <div id='tictac_r'></div>
+        <div id='tictac_r'></div>
+        <div id='tictac_r'></div>
+        <div id='tictac_r'></div>
+        <div id='tictac_r'></div>
+        <div id='tictac_r'></div>
+        <div id='tictac_r'></div>
+        <div id='tictac_r'></div>
+      </div>
+      <div id="r_3"></div><div id="pr_3"> <p> GO Train LE</p></div>
+      <div id="ttr">
+        <div id='tictac_r'></div>
+        <div id='tictac_r'></div>
+        <div id='tictac_r'></div>
+        <div id='tictac_r'></div>
+        <div id='tictac_r'></div>
+        <div id='tictac_r'></div>
+        <div id='tictac_r'></div>
+        <div id='tictac_r'></div>
+        <div id='tictac_r'></div>
+        <div id='tictac_r'></div>
+      </div>
+      <div id="r_4"></div><div id="pr_4"> <p> GO Train LE</p></div>
+      <div id="ttr">
+        <div id='tictac_r'></div>
+        <div id='tictac_r'></div>
+        <div id='tictac_r'></div>
+        <div id='tictac_r'></div>
+        <div id='tictac_r'></div>
+        <div id='tictac_r'></div>
+        <div id='tictac_r'></div>
+        <div id='tictac_r'></div>
+        <div id='tictac_r'></div>
+        <div id='tictac_r'></div>
+      </div>
+      <div id="r_5"></div><div id="pr_5"> <p> GO Train LE</p></div>
+      <div id="ttr">
+        <div id='tictac_r'></div>
+        <div id='tictac_r'></div>
+        <div id='tictac_r'></div>
+        <div id='tictac_r'></div>
+        <div id='tictac_r'></div>
+        <div id='tictac_r'></div>
+        <div id='tictac_r'></div>
+        <div id='tictac_r'></div>
+        <div id='tictac_r'></div>
+        <div id='tictac_r'></div>
+      </div>
+      <div id="r_6"></div><div id="pr_6"> <p> GO Train LE</p></div>
+      <div id="ttr">
+        <div id='tictac_r'></div>
+        <div id='tictac_r'></div>
+        <div id='tictac_r'></div>
+        <div id='tictac_r'></div>
+        <div id='tictac_r'></div>
+        <div id='tictac_r'></div>
+        <div id='tictac_r'></div>
+        <div id='tictac_r'></div>
+        <div id='tictac_r'></div>
+        <div id='tictac_r'></div>
+      </div>
+
+
+
+      <div id='route_perc'>
+        <p>trips per transit route / total transit trips</p>
+      </div>
+
+    </div>
+
+
+
+
+  </div>
+
+  <div id='map'></div>
+
+</div>
+
+
+<script>
+
+
+// data for bike and walk trips over 120 mins are filtered out
+var duration_data = [['UTSC', 'walk', 596, 1249.2617449664428, 1164.0, 731.22263061014348], ['UTSC', 'bike', 73, 1180.6438356164383, 516.0, 1602.896935387831], ['UTSC', 'transit', 2745, 2919.0214936247721, 2777.0, 1359.3402465583274], ['UTSC', 'auto', 892, 1142.1037819773528, 1003.591985, 702.01027272887336], ['UTSG', 'walk', 8656, 1099.2657116451016, 999.0, 603.04311800998732], ['UTSG', 'bike', 3503, 806.40593776762773, 633.0, 572.14850195971576], ['UTSG', 'transit', 13443, 3473.9901013799663, 3298.0, 1515.4941739325111], ['UTSG', 'auto', 928, 1864.0906100807119, 1839.8114149999999, 1242.1040820470794], ['UTM', 'walk', 354, 1222.3248587570622, 1187.0, 488.4380259574919], ['UTM', 'bike', 34, 2115.0294117647059, 1369.0, 1687.9973600009694], ['UTM', 'transit', 2646, 2860.9794934365837, 2395.0, 1611.3726089713368], ['UTM', 'auto', 1016, 1341.4518759020639, 1141.048822, 851.98763858587517], ['YorkK', 'walk', 1495, 1366.894983277592, 884.0, 1229.4973371321162], ['YorkK', 'bike', 194, 1566.8144329896907, 919.0, 1452.8787373207367], ['YorkK', 'transit', 8300, 3788.498428745012, 3785.0, 1286.8894999181307], ['YorkK', 'auto', 1798, 1533.1800430457945, 1317.0224195000001, 925.6796921607712], ['YorkG', 'walk', 161, 1579.5590062111801, 1175.0, 947.15783310068298], ['YorkG', 'bike', 9, 809.22222222222217, 831.0, 24.348295754997707], ['YorkG', 'transit', 788, 3689.2153771625626, 3431.5, 1532.042510289476], ['YorkG', 'auto', 188, 1853.9573701728743, 1805.7816760000001, 1245.6688722162185], ['Ryers', 'walk', 1761, 972.29812606473592, 827.0, 716.71586343183549], ['Ryers', 'bike', 618, 1178.2119741100323, 996.0, 831.98657961484537], ['Ryers', 'transit', 8865, 3840.4918751679634, 3755.0, 1454.0673148296569], ['Ryers', 'auto', 412, 1975.4627091279124, 1963.871578, 938.69227063492156], ['OCAD', 'walk', 348, 1032.0114942528735, 958.0, 621.30609544386289], ['OCAD', 'bike', 197, 875.10659898477161, 694.0, 568.68648532024667], ['OCAD', 'transit', 1092, 3684.4093406593406, 3517.5, 1625.3124557380384], ['OCAD', 'auto', 50, 1740.3461446820004, 1796.216795, 1151.3671874610898],['UTSC', 'all', 4398, 2449.0358284501613, 1987.0, 1933.6962261014362], ['UTSG', 'all', 26998, 2467.3164714810978, 1788.0, 2694.6421102528875], ['UTM', 'all', 4160, 2557.2695730729952, 1900.0, 2323.4174216204515], ['YorkK', 'all', 12047, 3357.1738205529268, 3253.0, 3852.930284136582], ['YorkG', 'all', 1202, 3595.5954266194699, 2839.0, 3390.7188273793076], ['Ryers', 'all', 11974, 3397.7647722583715, 3197.0, 2382.6786868316353], ['OCAD', 'all', 1734, 3004.8929107463086, 2513.0, 2627.3492621319783], ['all', 'walk', 13634, 1606.4683878538947, 997.5, 4762.7879113795716], ['all', 'bike', 4665, 956.93654876741698, 709.0, 981.58960708925815], ['all', 'transit', 38964, 3701.6801873944096, 3512.0, 1794.8111261314282], ['all', 'auto', 5316, 1562.2592527627389, 1388.282222, 1083.8080071471684], ['all', 'all', 62579, 2858.8493905195237, 2410.0, 2883.7447920218769]]
+
+
+// geojsonn for campus locations
+var campus_locations = {
+  "type": "FeatureCollection",
+  "features": [
+  { "type": "Feature", "properties": { "field_1": "UTSC", "field_2": -79.187490, "field_3": 43.785210, "field_4": 1074 }, "geometry": { "type": "Point", "coordinates": [ -79.18749, 43.78521 ] } },
+  { "type": "Feature", "properties": { "field_1": "UTSG", "field_2": -79.396949, "field_3": 43.663219, "field_4": 6188 }, "geometry": { "type": "Point", "coordinates": [ -79.396949, 43.663219 ] } },
+  { "type": "Feature", "properties": { "field_1": "UTM", "field_2": -79.663787, "field_3": 43.548233, "field_4": 947 }, "geometry": { "type": "Point", "coordinates": [ -79.663787, 43.548233 ] } },
+  { "type": "Feature", "properties": { "field_1": "YorkK", "field_2": -79.503068, "field_3": 43.773170, "field_4": 3267 }, "geometry": { "type": "Point", "coordinates": [ -79.503068, 43.77317 ] } },
+  { "type": "Feature", "properties": { "field_1": "YorkG", "field_2": -79.379745, "field_3": 43.727538, "field_4": 325 }, "geometry": { "type": "Point", "coordinates": [ -79.379745, 43.727538 ] } },
+  { "type": "Feature", "properties": { "field_1": "Ryers", "field_2": -79.378994, "field_3": 43.657951, "field_4": 2935 }, "geometry": { "type": "Point", "coordinates": [ -79.378994, 43.657951 ] } },
+  { "type": "Feature", "properties": { "field_1": "OCAD", "field_2": -79.391032, "field_3": 43.652692, "field_4": 470 }, "geometry": { "type": "Point", "coordinates": [ -79.391032, 43.652692 ] } }
+  ]
+  }
+
+
+// data for percent of trips per route / total trips
+var transit_routes = {
+  "UTSC": [
+    ["TTC 95", 43],
+    ["TTC 38", 18],
+    ["TTC 198", 14],
+    ["TTC Line 2", 11],
+    ["DRT 900", 9],
+    ["TTC 116", 8]
+  ],
+  "UTM": [
+    ["MiWay 44", 37],
+    ["MiWay 101", 26],
+    ["MiWay 110", 19],
+    ["MiWay 1", 17],
+    ["MiWay 35", 11],
+    ["UTM Shuttle", 6],
+  ],
+  "UTSG": [
+    ["TTC Line 1", 43],
+    ["TTC Line 2", 38],
+    ["TTC 511", 7],
+    ["TTC 94", 7],
+    ["TTC 506", 4],
+    ["GO Train LW", 4]
+  ],
+  "YorkK": [
+    ["TTC 199", 17],
+    ["TTC Line 1", 15],
+    ["TTC 196", 12],
+    ["TTC 60", 11],
+    ["TTC 195", 9],
+    ["501 Zum", 9]
+  ],
+  "YorkG": [
+    ["TTC Line 1", 56],
+    ["TTC 124", 55],
+    ["TTC 11", 32],
+    ["TTC Line 2", 15],
+    ["TTC 162", 13],
+    ["TTC 95", 12]
+  ],
+  'OCAD': [
+    ["TTC Line 1", 68],
+    ["TTC Line 2", 19],
+    ["TTC 505", 10],
+    ["GO Train MI", 6],
+    ["GO Train LE", 5],
+    ["GO Train LW", 5]
+  ],
+  "Ryers": [
+    ["TTC Line 1", 89],
+    ["TTC Line 2", 22],
+    ["GO Train MI", 9],
+    ["GO Train LE", 6],
+    ["GO Train GT", 5],
+    ["GO Train LW", 4]
+  ]
+  ,
+  "all": [
+    ["TTC Line 1", 43],
+    ["TTC Line 2", 22],
+    ["TTC 199", 4],
+    ["TTC 95", 4],
+    ["GO Train MI", 3],
+    ["TTC 60", 3]
+  ]
+}
+
+
+//colours to call later
+var red = '#FFC5C1'
+var purple = '#C9C1E2'
+var blue = '#BEEAFD'
+var green = '#B4E5CA'
+var white = '#fff'
+var black = '#000'
+
+
+// basic mapbox map setup
+mapboxgl.accessToken = 'pk.eyJ1IjoiamVmZmFsbGVuIiwiYSI6InJOdUR0a1kifQ.fTlTX02Ln0lwgaY4vkubSQ';
+var map = new mapboxgl.Map({
+    container: 'map',
+    style: 'mapbox://styles/jeffallen/cisxt3qa0004c2xo4lo8bgl8z',
+    center: [-79.4054, 43.71],
+    zoom: 9,
+    bearing: -17,
+    maxZoom: 13,
+    minZoom: 8,
+    attributionControl: false
+});
+
+
+// maybe useful to grab from
+mode_list = ['auto','transit','bike','walk', 'all']
+campus_list = ['UTM','UTSG','UTSC','YorkK','YorkG','Ryers','OCAD']
+
+// for easy looping
+mode_length = 5
+campus_length = 7
+
+// initial line colour
+line_color = white
+
+// load two layers with all modes and all campuses
+map.on('load', function () {
+    map.addSource("routes_simple_", {
+        type: 'vector',
+        url: 'mapbox://jeffallen.aqagkczr'
+    });
+    map.addLayer({
+        "id": "routes_simple_",
+        "maxzoom": 10,
+        "type": "line",
+        "source": "routes_simple_",
+        "source-layer": "smto_simple-51jubc",
+        "layout": {
+            "line-join": "round",
+            "line-cap": "round"
+        },
+        "paint": {
+            "line-color": line_color,
+            "line-width": 1,
+            "line-opacity": {
+                property: 'travel',
+                type: 'exponential',
+                base: 1,
+                stops: [
+                    [1, 0.005],
+                    [7, 0.035]
+                  ]
+            }
+        },
+        "filter": [
+        "all",
+        ["!=", "campus", 'all'],
+        ["!=", "mode", 'all']
+        ]
+
+    });
+});
+
+map.on('load', function () {
+    map.addSource("routes_complex", {
+        type: 'vector',
+        url: 'mapbox://jeffallen.bvi3qox4'
+    });
+    map.addLayer({
+        "id": "routes_complex",
+        "minzoom": 10,
+        "type": "line",
+        "source": "routes_complex",
+        "source-layer": "smto_routes-91wxkf",
+        "layout": {
+            "line-join": "round",
+            "line-cap": "round"
+        },
+        "paint": {
+            "line-color": line_color,
+            "line-width": {
+                "base": 1,
+                "stops": [
+                    [10, 1],
+                    [14, 3]
+                    ]
+            },
+            "line-opacity": {
+                property: 'travel',
+                type: 'exponential',
+                base: 1,
+                stops: [
+                    [1, 0.005],
+                    [7, 0.035]
+                  ]
+            }
+        },
+        "filter": [
+        "all",
+        ["!=", "campus", 'all'],
+        ["!=", "mode", 'all']
+        ]
+    });
+});
+
+// initial array for whats on the map
+x = ['all','all']
+
+// switching between modes everything that goes along with it
+function mode_switch(mode_button) {
+
+  x = [x[0], mode_button]
+  for (var iii = 0; iii < 40; iii++) {
+    if (duration_data[iii][0] == x[0] && duration_data[iii][1] == x[1]) {
+      working_data = duration_data[iii]
+      console.log(working_data)
+    }
+  }
+
+  // for duration bar widths
+  avg_dur = Math.round( (working_data[3] / 60) * 10) / 10
+  med_dur = Math.round( (working_data[4] / 60) * 10) / 10
+  // console.log(avg_dur)
+  // console.log(med_dur)
+  document.getElementById('med_tt_bar').style.width = String(Math.floor(med_dur * 3.3333333)) + 'px';
+  document.getElementById('avg_tt_bar').style.width = String(Math.floor(avg_dur * 3.3333333)) + 'px';
+
+  document.getElementById('med_p').innerHTML = '<p>' + String(med_dur) + ' mins</p>'
+  document.getElementById('avg_p').innerHTML = '<p>' + String(avg_dur) + ' mins</p>'
+
+
+
+
+  // console.log(mode_button)
+  // map.setFilter('routes_simple_',["==", "mode", mode_button]);
+  // map.setFilter('routes_complex',["==", "mode", mode_button]);
+  campus_filter = map.getFilter('routes_simple_')[1]
+  if (mode_button == 'all') {
+    filter = [
+    "all",
+    campus_filter,
+    ["!=", "mode", mode_button]
+    ]
+  }
+  else {
+    filter = [
+    "all",
+    campus_filter,
+    ["==", "mode", mode_button]
+    ]
+  }
+  map.setFilter('routes_simple_',filter);
+  map.setFilter('routes_complex',filter);
+
+  if (mode_button == 'auto') {
+    document.getElementById('routes').style.opacity = '0'
+
+    document.getElementById('routes').style.opacity = '0'
+    document.getElementById('m_auto').style.opacity = '0.98';
+    document.getElementById('m_transit').style.opacity = '0.4';
+    document.getElementById('m_all').style.opacity = '0.4';
+    document.getElementById('m_walk').style.opacity = '0.4';
+    document.getElementById('m_bike').style.opacity = '0.4';
+    map.setPaintProperty('routes_simple_', 'line-color', purple);
+    map.setPaintProperty('routes_complex', 'line-color', purple);
+
+    document.getElementById('avg_tt_bar').style.backgroundColor = purple
+    document.getElementById('med_tt_bar').style.backgroundColor = purple
+    opac = {
+        property: 'travel',
+        type: 'exponential',
+        base: 1,
+        stops: [
+            [1, 0.01],
+            [7, 0.07]
+          ]
+    }
+    map.setPaintProperty('routes_simple_', 'line-opacity', opac)
+    map.setPaintProperty('routes_complex', 'line-opacity', opac)
+
+    document.getElementById('prba').style.opacity = '1';
+    document.getElementById('prbt').style.opacity = '0.6';
+    document.getElementById('prbw').style.opacity = '0.6';
+    document.getElementById('prbb').style.opacity = '0.6';
+
+
+  }
+  else if (mode_button == 'all') {
+
+    document.getElementById('routes').style.opacity = '0'
+
+    document.getElementById('m_auto').style.opacity = '0.4';
+    document.getElementById('m_transit').style.opacity = '0.4';
+    document.getElementById('m_all').style.opacity = '0.98';
+    document.getElementById('m_walk').style.opacity = '0.4';
+    document.getElementById('m_bike').style.opacity = '0.4';
+    map.setPaintProperty('routes_simple_', 'line-color', white);
+    map.setPaintProperty('routes_complex', 'line-color', white);
+
+    document.getElementById('avg_tt_bar').style.backgroundColor = white
+    document.getElementById('med_tt_bar').style.backgroundColor = white
+    opac = {
+        property: 'travel',
+        type: 'exponential',
+        base: 1,
+        stops: [
+            [1, 0.005],
+            [7, 0.035]
+          ]
+    }
+    map.setPaintProperty('routes_simple_', 'line-opacity', opac)
+    map.setPaintProperty('routes_complex', 'line-opacity', opac)
+
+    document.getElementById('prba').style.opacity = '0.8';
+    document.getElementById('prbt').style.opacity = '0.8';
+    document.getElementById('prbw').style.opacity = '0.8';
+    document.getElementById('prbb').style.opacity = '0.8';
+  }
+  else if (mode_button == 'transit') {
+
+    console.log(transit_routes[x[0]][0])
+    document.getElementById('routes').style.opacity = '0.99'
+    document.getElementById('r_1').style.width = String(transit_routes[x[0]][0][1] * 3 - 1) + "px"
+    document.getElementById('r_2').style.width = String(transit_routes[x[0]][1][1] * 3 - 1) + "px"
+    document.getElementById('r_3').style.width = String(transit_routes[x[0]][2][1] * 3 - 1) + "px"
+    document.getElementById('r_4').style.width = String(transit_routes[x[0]][3][1] * 3 - 1) + "px"
+    document.getElementById('r_5').style.width = String(transit_routes[x[0]][4][1] * 3 - 1) + "px"
+    document.getElementById('r_6').style.width = String(transit_routes[x[0]][5][1] * 3 - 1) + "px"
+
+    document.getElementById('pr_1').innerHTML = "<p> " + String(transit_routes[x[0]][0][1]) + "% - " + transit_routes[x[0]][0][0]
+    document.getElementById('pr_2').innerHTML = "<p> " + String(transit_routes[x[0]][1][1]) + "% - " + transit_routes[x[0]][1][0]
+    document.getElementById('pr_3').innerHTML = "<p> " + String(transit_routes[x[0]][2][1]) + "% - " + transit_routes[x[0]][2][0]
+    document.getElementById('pr_4').innerHTML = "<p> " + String(transit_routes[x[0]][3][1]) + "% - " + transit_routes[x[0]][3][0]
+    document.getElementById('pr_5').innerHTML = "<p> " + String(transit_routes[x[0]][4][1]) + "% - " + transit_routes[x[0]][4][0]
+    document.getElementById('pr_6').innerHTML = "<p> " + String(transit_routes[x[0]][5][1]) + "% - " + transit_routes[x[0]][5][0]
+
+
+      if (transit_routes[x[0]][0][1] > 40) {
+        console.log("yes")
+        document.getElementById('pr_1').style.opacity = '0'
+        document.getElementById('r_1_p').style.opacity = '1'
+        document.getElementById('pr_1').style.width = '0px'
+
+      } else
+      {
+        console.log("no")
+        document.getElementById('pr_1').style.opacity = '1'
+        document.getElementById('r_1_p').style.opacity = '0'
+        document.getElementById('pr_1').style.width = '140px'
+      };
+
+      if (transit_routes[x[0]][1][1] > 40) {
+        console.log("yes")
+        document.getElementById('pr_2').style.opacity = '0'
+        document.getElementById('r_2_p').style.opacity = '1'
+        document.getElementById('pr_2').style.width = '0px'
+      } else
+      {
+        console.log("no")
+        document.getElementById('pr_2').style.opacity = '1'
+        document.getElementById('r_2_p').style.opacity = '0'
+        document.getElementById('pr_2').style.width = '140px'
+      };
+
+
+
+    document.getElementById('m_auto').style.opacity = '0.4';
+    document.getElementById('m_transit').style.opacity = '0.98';
+    document.getElementById('m_all').style.opacity = '0.4';
+    document.getElementById('m_walk').style.opacity = '0.4';
+    document.getElementById('m_bike').style.opacity = '0.4';
+    map.setPaintProperty('routes_simple_', 'line-color', red);
+    map.setPaintProperty('routes_complex', 'line-color', red);
+
+    document.getElementById('avg_tt_bar').style.backgroundColor = red
+    document.getElementById('med_tt_bar').style.backgroundColor = red
+    opac = {
+        property: 'travel',
+        type: 'exponential',
+        base: 1,
+        stops: [
+            [1, 0.072],
+            [7, 0.05]
+          ]
+    }
+    map.setPaintProperty('routes_simple_', 'line-opacity', opac)
+    map.setPaintProperty('routes_complex', 'line-opacity', opac)
+
+    document.getElementById('prba').style.opacity = '0.6';
+    document.getElementById('prbt').style.opacity = '1';
+    document.getElementById('prbw').style.opacity = '0.6';
+    document.getElementById('prbb').style.opacity = '0.6';
+  }
+  else if (mode_button == 'walk') {
+    document.getElementById('routes').style.opacity = '0'
+
+    document.getElementById('m_auto').style.opacity = '0.4';
+    document.getElementById('m_transit').style.opacity = '0.4';
+    document.getElementById('m_all').style.opacity = '0.4';
+    document.getElementById('m_walk').style.opacity = '0.98';
+    document.getElementById('m_bike').style.opacity = '0.4';
+    map.setPaintProperty('routes_simple_', 'line-color', blue);
+    map.setPaintProperty('routes_complex', 'line-color', blue);
+
+    document.getElementById('avg_tt_bar').style.backgroundColor = blue
+    document.getElementById('med_tt_bar').style.backgroundColor = blue
+    opac = {
+        property: 'travel',
+        type: 'exponential',
+        base: 1,
+        stops: [
+            [1, 0.02],
+            [7, 0.14]
+          ]
+    }
+    map.setPaintProperty('routes_simple_', 'line-opacity', opac)
+    map.setPaintProperty('routes_complex', 'line-opacity', opac)
+
+    document.getElementById('prba').style.opacity = '0.6';
+    document.getElementById('prbt').style.opacity = '0.6';
+    document.getElementById('prbw').style.opacity = '1';
+    document.getElementById('prbb').style.opacity = '0.6';
+  }
+  else if (mode_button == 'bike') {
+    document.getElementById('routes').style.opacity = '0'
+
+    document.getElementById('m_auto').style.opacity = '0.4';
+    document.getElementById('m_transit').style.opacity = '0.4';
+    document.getElementById('m_all').style.opacity = '0.4';
+    document.getElementById('m_walk').style.opacity = '0.4';
+    document.getElementById('m_bike').style.opacity = '0.98';
+    map.setPaintProperty('routes_simple_', 'line-color', green);
+    map.setPaintProperty('routes_complex', 'line-color', green);
+
+    document.getElementById('avg_tt_bar').style.backgroundColor = green
+    document.getElementById('med_tt_bar').style.backgroundColor = green
+
+    document.getElementById('prba').style.opacity = '0.6';
+    document.getElementById('prbt').style.opacity = '0.6';
+    document.getElementById('prbw').style.opacity = '0.6';
+    document.getElementById('prbb').style.opacity = '1';
+  }
+  opac = {
+      property: 'travel',
+      type: 'exponential',
+      base: 1,
+      stops: [
+          [1, 0.02],
+          [7, 0.14]
+        ]
+  }
+  map.setPaintProperty('routes_simple_', 'line-opacity', opac)
+  map.setPaintProperty('routes_complex', 'line-opacity', opac)
+
+}
+
+
+mode_share = {
+  // auto, transit, walk, bike
+  'all': [8, 62, 22, 8], //g
+  'UTSC': [20, 64, 14, 2], //g
+  'UTM': [24, 66, 9, 1], //g
+  'UTSG': [4, 51, 32, 13], //g
+  'Ryers': [4, 76, 15, 5], //g
+  'OCAD': [3, 66, 20, 11], //g
+  'YorkK': [15, 71, 12, 2], //g
+  'YorkG': [16, 67, 16, 1] //g
+}
+
+// switching campuses and everything that goes along with it
+function campus_switch(campus_button) {
+
+  x = [campus_button, x[1]]
+  for (var iii = 0; iii < 40; iii++) {
+    if (duration_data[iii][0] == x[0] && duration_data[iii][1] == x[1]) {
+      working_data = duration_data[iii]
+      console.log(working_data)
+    }
+  }
+
+  console.log(transit_routes[campus_button][0])
+  document.getElementById('r_1').style.width = String(transit_routes[x[0]][0][1] * 3 - 1) + "px"
+  document.getElementById('r_2').style.width = String(transit_routes[x[0]][1][1] * 3 - 1) + "px"
+  document.getElementById('r_3').style.width = String(transit_routes[x[0]][2][1] * 3 - 1) + "px"
+  document.getElementById('r_4').style.width = String(transit_routes[x[0]][3][1] * 3 - 1) + "px"
+  document.getElementById('r_5').style.width = String(transit_routes[x[0]][4][1] * 3 - 1) + "px"
+  document.getElementById('r_6').style.width = String(transit_routes[x[0]][5][1] * 3 - 1) + "px"
+
+  document.getElementById('pr_1').innerHTML = "<p> " + String(transit_routes[x[0]][0][1]) + "% - " + transit_routes[x[0]][0][0]
+  document.getElementById('pr_2').innerHTML = "<p> " + String(transit_routes[x[0]][1][1]) + "% - " + transit_routes[x[0]][1][0]
+  document.getElementById('r_1_p').innerHTML = "<p> " + String(transit_routes[x[0]][0][1]) + "% - " + transit_routes[x[0]][0][0]
+  document.getElementById('r_2_p').innerHTML = "<p> " + String(transit_routes[x[0]][1][1]) + "% - " + transit_routes[x[0]][1][0]
+  document.getElementById('pr_3').innerHTML = "<p> " + String(transit_routes[x[0]][2][1]) + "% - " + transit_routes[x[0]][2][0]
+  document.getElementById('pr_4').innerHTML = "<p> " + String(transit_routes[x[0]][3][1]) + "% - " + transit_routes[x[0]][3][0]
+  document.getElementById('pr_5').innerHTML = "<p> " + String(transit_routes[x[0]][4][1]) + "% - " + transit_routes[x[0]][4][0]
+  document.getElementById('pr_6').innerHTML = "<p> " + String(transit_routes[x[0]][5][1]) + "% - " + transit_routes[x[0]][5][0]
+
+  if (transit_routes[x[0]][0][1] > 40) {
+    console.log("yes")
+    document.getElementById('pr_1').style.opacity = '0'
+    document.getElementById('r_1_p').style.opacity = '1'
+    document.getElementById('pr_1').style.width = '0px'
+
+  } else
+  {
+    console.log("no")
+    document.getElementById('pr_1').style.opacity = '1'
+    document.getElementById('r_1_p').style.opacity = '0'
+    document.getElementById('pr_1').style.width = '140px'
+  };
+
+  if (transit_routes[x[0]][1][1] > 40) {
+    console.log("yes")
+    document.getElementById('pr_2').style.opacity = '0'
+    document.getElementById('r_2_p').style.opacity = '1'
+    document.getElementById('pr_2').style.width = '0px'
+  } else
+  {
+    console.log("no")
+    document.getElementById('pr_2').style.opacity = '1'
+    document.getElementById('r_2_p').style.opacity = '0'
+    document.getElementById('pr_2').style.width = '140px'
+  };
+
+
+  // for duration bar widths
+  avg_dur = Math.round( (working_data[3] / 60) * 10) / 10
+  med_dur = Math.round( (working_data[4] / 60) * 10) / 10
+  console.log(avg_dur)
+  console.log(med_dur)
+  document.getElementById('med_tt_bar').style.width = String(Math.floor(med_dur * 3.3333333)) + 'px';
+  document.getElementById('avg_tt_bar').style.width = String(Math.floor(avg_dur * 3.3333333)) + 'px';
+
+  document.getElementById('med_p').innerHTML = '<p>' + String(med_dur) + ' mins</p>'
+  document.getElementById('avg_p').innerHTML = '<p>' + String(avg_dur) + ' mins</p>'
+
+
+  console.log(campus_button)
+  transit_filter = map.getFilter('routes_simple_')[2]
+  if (campus_button == 'all') {
+    filter = [
+    "all",
+    ["!=", "campus", campus_button],
+    transit_filter
+    ]
+    map.setFilter('routes_simple_',filter);
+    map.setFilter('routes_complex',filter);
+    map.setFilter('campus',["!=","field_1",campus_button]);
+    map.setFilter('campus2',["!=","field_1",campus_button]);
+
+  }
+  else  {
+    filter = [
+    "all",
+    ["==", "campus", campus_button],
+    transit_filter
+    ]
+    map.setFilter('routes_simple_',filter);
+    map.setFilter('routes_complex',filter);
+    map.setFilter('campus',["==","field_1",campus_button]);
+    map.setFilter('campus2',["==","field_1",campus_button]);
+  }
+
+  ca_ids = ['c_all','c_yorkk','c_utsg','c_utsc','c_yorkg','c_utm','c_ryers','c_ocad']
+  ca_nms = ['all','YorkK','UTSG','UTSC','YorkG','UTM','Ryers','OCAD']
+
+  for (var qq = 0; qq < 8; qq++) {
+    if (campus_button == ca_nms[qq]) {
+      // changing opacity of buttons
+      document.getElementById(ca_ids[qq]).style.opacity = '0.98';
+
+      // for changing mode sher
+      var mode_get = mode_share[campus_button]
+      document.getElementById("rb_auto").style.width = String(mode_get[0] * 2) + 'px';
+      document.getElementById("rb_transit").style.width = String(mode_get[1] * 2) + 'px';
+      document.getElementById("rb_walk").style.width = String(mode_get[2]) * 2 + 'px';
+      document.getElementById("rb_bike").style.width = String(mode_get[3]) * 2 + 'px';
+      document.getElementById("prba").innerHTML = String(mode_get[0]) + "%<br>D";
+      document.getElementById("prbt").innerHTML = String(mode_get[1]) + "%<br>T";
+      document.getElementById("prbw").innerHTML = String(mode_get[2]) + "%<br>W";
+      document.getElementById("prbb").innerHTML = String(mode_get[3]) + "%<br>B";
+    }
+    else {
+      document.getElementById(ca_ids[qq]).style.opacity = '0.4';
+    }
+
+  }
+}
+
+
+
+//load in campus locations
+map.on('load', function() {
+  map.addSource('campus',{
+        type: 'geojson',
+        data: campus_locations
+    });
+
+      map.addLayer({
+            "id": "campus",
+            "type": "circle",
+            "source": "campus",
+            "layout": {
+            },
+            "paint": {
+                "circle-radius": {
+                    "base": 1,
+                    "stops": [
+                        [10, 8],
+                        [14, 18]
+                        ]
+                },
+                "circle-color": black
+            }
+        });
+      map.addLayer({
+            "id": "campus2",
+            "type": "circle",
+            "source": "campus",
+            "layout": {
+            },
+            "paint": {
+                "circle-radius": {
+                    "base": 1,
+                    "stops": [
+                        [10, 6],
+                        [14, 14]
+                        ]
+                },
+                "circle-color": white
+            }
+        });
+   });
+
+// maybe add a control in the future
+//map.addControl(new mapboxgl.Navigation({position: 'top-left'}));
+
+</script>
+
+</body>
+</html>
