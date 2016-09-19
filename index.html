@@ -12,12 +12,17 @@
 
         body {
         margin:0; padding:0;
-        min-width: 993px;
+        min-width: 1320px;
         }
 
         p {
           font-family: 'Roboto', sans-serif;
           color: white;
+        }
+
+        a {
+          text-decoration: none;
+          color: grey;
         }
 
         #top {
@@ -30,7 +35,7 @@
           height: 75px;
           width: 320px;
           float:left;
-          background-color: black;
+          background-color: #1A1A1A;
 
         }
         #title p {
@@ -43,7 +48,7 @@
           width:calc(100% - 321px);
           height:75px;
           float: left;
-          background-color: #202121;
+          background-color: #1A1A1A;;
           border-left: solid 1px grey;
           min-height: 500px;
         }
@@ -146,6 +151,30 @@
           opacity: 0.8;
         }
 
+        #utoronto_img {
+          float: left;
+          padding-top: 5px;
+          height: 75px;
+          width: 230px;
+          margin-left: 1px;
+          border-left:: 1px solid grey;
+          background-color: #1A1A1A;
+
+        }
+
+        #smto_img {
+          margin-left: 3px;
+          float: left;
+          padding-top: 15px;
+          height: 75px;
+          width: 88px;
+          margin-left: 6px;
+          background-color: #1A1A1A;
+        }
+
+
+
+
         #main {
           overflow: hidden;
         }
@@ -156,7 +185,7 @@
           width: 320px;
           float:left;
           border-top: solid 2px grey;
-          background-color: #202121
+          background-color: #1A1A1A;
         }
 
         #chart_1 {
@@ -334,7 +363,7 @@
 
         #routes {
           width: 322px;
-          height: 300px;
+          height: 230px;
           opacity: 0;
           /*background-color: red;*/
         }
@@ -408,6 +437,34 @@
           opacity: 0.8;
         }
 
+        #attribution {
+
+        }
+
+        #a_line {
+          width: 280px;
+          height: 1px;
+          background-color: grey;
+          margin-left: 20px;
+          float: left;
+          margin-top: -10px;
+        }
+
+        #attribution p {
+          padding: 0;
+          margin: 0;
+          font-size: 11px;
+          padding-top: 5px;
+          padding-left: 20px;
+          padding-bottom: 2px;
+          color: grey;
+          width: 280px;
+        }
+
+        #a_t_p a {
+          color: grey;
+        }
+
         #map {
           width:calc(100% - 322px);
           height:calc(100vh - 77px);
@@ -418,7 +475,269 @@
           border-top: solid 2px grey;
         }
 
+        .mapboxgl-map {
+            font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+            overflow: hidden;
+            position: relative;
+            -webkit-tap-highlight-color: rgba(0,0,0,0);
+        }
 
+        .mapboxgl-canvas-container.mapboxgl-interactive,
+        .mapboxgl-ctrl-nav-compass {
+            cursor: -webkit-grab;
+            cursor: -moz-grab;
+            cursor: grab;
+        }
+        .mapboxgl-canvas-container.mapboxgl-interactive:active,
+        .mapboxgl-ctrl-nav-compass:active {
+            cursor: -webkit-grabbing;
+            cursor: -moz-grabbing;
+            cursor: grabbing;
+        }
+
+        .mapboxgl-ctrl-top-left,
+        .mapboxgl-ctrl-top-right,
+        .mapboxgl-ctrl-bottom-left,
+        .mapboxgl-ctrl-bottom-right  { position:absolute; }
+        .mapboxgl-ctrl-top-left      { top:0; left:0; }
+        .mapboxgl-ctrl-top-right     { top:0; right:0; }
+        .mapboxgl-ctrl-bottom-left   { bottom:0; left:0; }
+        .mapboxgl-ctrl-bottom-right  { right:0; bottom:0; }
+
+        .mapboxgl-ctrl { clear:both; }
+        .mapboxgl-ctrl-top-left .mapboxgl-ctrl { margin:10px 0 0 10px; float:left; }
+        .mapboxgl-ctrl-top-right .mapboxgl-ctrl{ margin:10px 10px 0 0; float:right; }
+        .mapboxgl-ctrl-bottom-left .mapboxgl-ctrl { margin:0 0 10px 10px; float:left; }
+        .mapboxgl-ctrl-bottom-right .mapboxgl-ctrl { margin:0 10px 10px 0; float:right; }
+
+        .mapboxgl-ctrl-group {
+            border-radius: 4px;
+            -moz-box-shadow: 0px 0px 2px rgba(0,0,0,0.1);
+            -webkit-box-shadow: 0px 0px 2px rgba(0,0,0,0.1);
+            box-shadow: 0px 0px 0px 2px rgba(0,0,0,0.1);
+            overflow: hidden;
+            background: black;
+        }
+        .mapboxgl-ctrl-group > button {
+            width: 30px;
+            height: 30px;
+            display: block;
+            padding: 0;
+            outline: none;
+            border: none;
+            border-bottom: 1px solid #ddd;
+            border-color: black;
+            box-sizing: border-box;
+            background-color: black;
+            cursor: pointer;
+            background-color: darkgrey;
+        }
+        /* https://bugzilla.mozilla.org/show_bug.cgi?id=140562 */
+        .mapboxgl-ctrl > button::-moz-focus-inner {
+            border: 0;
+            padding: 0;
+        }
+        .mapboxgl-ctrl > button:last-child {
+            border-bottom: 0;
+            background-color: #323232;
+        }
+        .mapboxgl-ctrl > button:hover {
+            background-color: grey;
+        }
+        .mapboxgl-ctrl-icon,
+        .mapboxgl-ctrl-icon > div.arrow {
+            speak: none;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        .mapboxgl-ctrl-icon.mapboxgl-ctrl-zoom-out {
+            padding: 5px;
+            background-color: #323232;
+            background-image: url("imgs/c_minus.svg");
+
+        }
+        .mapboxgl-ctrl-icon.mapboxgl-ctrl-zoom-in  {
+            padding: 5px;
+            background-color: #323232;
+            background-image: url("imgs/c_plus.svg");
+        }
+        .mapboxgl-ctrl-icon.mapboxgl-ctrl-compass > div.arrow {
+            width: 20px;
+            height: 20px;
+            margin: 5px;
+            background-color: #323232;
+            background-image: url("imgs/c_arrow.svg");
+            background-repeat: no-repeat;
+        }
+
+
+        .mapboxgl-ctrl-icon.mapboxgl-ctrl-compass:hover > div.arrow
+        {
+            width: 20px;
+            height: 20px;
+            margin: 5px;
+            background-color: grey;
+            background-image: url("imgs/c_arrow.svg");
+            background-repeat: no-repeat;
+        }
+
+
+        .mapboxgl-ctrl.mapboxgl-ctrl-attrib {
+            padding: 0 5px;
+            background-color: rgba(255,255,255,0.5);
+            margin: 0;
+        }
+        .mapboxgl-ctrl-attrib a {
+            color: rgba(0,0,0,0.75);
+            text-decoration: none;
+        }
+        .mapboxgl-ctrl-attrib a:hover {
+            color: inherit;
+            text-decoration: underline;
+        }
+        .mapboxgl-ctrl-attrib .mapbox-improve-map {
+            font-weight: bold;
+            margin-left: 2px;
+        }
+
+        .mapboxgl-popup {
+            position: absolute;
+            display: -webkit-flex;
+            display: flex;
+            will-change: transform;
+            pointer-events: none;
+        }
+        .mapboxgl-popup-anchor-top,
+        .mapboxgl-popup-anchor-top-left,
+        .mapboxgl-popup-anchor-top-right {
+            -webkit-flex-direction: column;
+            flex-direction: column;
+        }
+        .mapboxgl-popup-anchor-bottom,
+        .mapboxgl-popup-anchor-bottom-left,
+        .mapboxgl-popup-anchor-bottom-right {
+            -webkit-flex-direction: column-reverse;
+            flex-direction: column-reverse;
+        }
+        .mapboxgl-popup-anchor-left {
+            -webkit-flex-direction: row;
+            flex-direction: row;
+        }
+        .mapboxgl-popup-anchor-right {
+            -webkit-flex-direction: row-reverse;
+            flex-direction: row-reverse;
+        }
+        .mapboxgl-popup-tip {
+            width: 0;
+            height: 0;
+            border: 10px solid transparent;
+            z-index: 1;
+        }
+        .mapboxgl-popup-anchor-top .mapboxgl-popup-tip {
+            -webkit-align-self: center;
+            align-self: center;
+            border-top: none;
+            border-bottom-color: #fff;
+        }
+        .mapboxgl-popup-anchor-top-left .mapboxgl-popup-tip {
+            -webkit-align-self: flex-start;
+            align-self: flex-start;
+            border-top: none;
+            border-left: none;
+            border-bottom-color: #fff;
+        }
+        .mapboxgl-popup-anchor-top-right .mapboxgl-popup-tip {
+            -webkit-align-self: flex-end;
+            align-self: flex-end;
+            border-top: none;
+            border-right: none;
+            border-bottom-color: #fff;
+        }
+        .mapboxgl-popup-anchor-bottom .mapboxgl-popup-tip {
+            -webkit-align-self: center;
+            align-self: center;
+            border-bottom: none;
+            border-top-color: #fff;
+        }
+        .mapboxgl-popup-anchor-bottom-left .mapboxgl-popup-tip {
+            -webkit-align-self: flex-start;
+            align-self: flex-start;
+            border-bottom: none;
+            border-left: none;
+            border-top-color: #fff;
+        }
+        .mapboxgl-popup-anchor-bottom-right .mapboxgl-popup-tip {
+            -webkit-align-self: flex-end;
+            align-self: flex-end;
+            border-bottom: none;
+            border-right: none;
+            border-top-color: #fff;
+        }
+        .mapboxgl-popup-anchor-left .mapboxgl-popup-tip {
+            -webkit-align-self: center;
+            align-self: center;
+            border-left: none;
+            border-right-color: #fff;
+        }
+        .mapboxgl-popup-anchor-right .mapboxgl-popup-tip {
+            -webkit-align-self: center;
+            align-self: center;
+            border-right: none;
+            border-left-color: #fff;
+        }
+        .mapboxgl-popup-close-button {
+            position: absolute;
+            right: 0;
+            top: 0;
+            border: none;
+            border-radius: 0 3px 0 0;
+            cursor: pointer;
+            background-color: rgba(0,0,0,0);
+        }
+        .mapboxgl-popup-close-button:hover {
+            background-color: rgba(0,0,0,0.05);
+        }
+        .mapboxgl-popup-content {
+            position: relative;
+            background: #fff;
+            border-radius: 3px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.10);
+            padding: 10px 10px 15px;
+            pointer-events: auto;
+        }
+        .mapboxgl-popup-anchor-top-left .mapboxgl-popup-content {
+            border-top-left-radius: 0;
+        }
+        .mapboxgl-popup-anchor-top-right .mapboxgl-popup-content {
+            border-top-right-radius: 0;
+        }
+        .mapboxgl-popup-anchor-bottom-left .mapboxgl-popup-content {
+            border-bottom-left-radius: 0;
+        }
+        .mapboxgl-popup-anchor-bottom-right .mapboxgl-popup-content {
+            border-bottom-right-radius: 0;
+        }
+
+        .mapboxgl-crosshair,
+        .mapboxgl-crosshair .mapboxgl-interactive,
+        .mapboxgl-crosshair .mapboxgl-interactive:active {
+            cursor: crosshair;
+        }
+        .mapboxgl-boxzoom {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            background: #fff;
+            border: 2px dotted #202020;
+            opacity: 0.5;
+        }
+        @media print {
+            .mapbox-improve-map {
+                display:none;
+            }
+        }
 
     </style>
 
@@ -487,11 +806,22 @@
       <div onclick='campus_switch("Ryers")' id='c_ryers'><p>Ryerson</p></div>
       <div onclick='campus_switch("OCAD")' id='c_ocad'><p>OCAD</p></div>
       <div onclick='campus_switch("all")' id='c_all'><p>All Campuses</p></div>
-      </div>
-
     </div>
 
+    <div id='smto_img'>
+      <img src='imgs/smto45.png' style="width:79px;height:45px;"></img>
+    </div>
+
+    <div id='utoronto_img'>
+      <img src='imgs/uoft65_229.png' style="width:229px;height:65px;"></img>
+    </div>
+
+
   </div>
+
+
+
+</div>
 
 </div>
 
@@ -651,6 +981,13 @@
 
 
 
+    <div id='attribution'>
+      <div id='a_line'></div>
+      <p><b><a href='https://creativecommons.org/licenses/by-nc-sa/4.0/'target="_blank">CC BY-NC-SA 4.0</a></b></p>
+      <p id='a_p_t'>Sources: StudentMoveTO, <a href='https://www.mapbox.com/mapbox-gl-js/api/'target="_blank">Mapbox</a>, <a href='https://www.openstreetmap.org/#map=13/43.6616/-79.3796'target="_blank">OpenStreetMap</a>, OpenTripPlanner, Toronto Transit Commission, GO Transit, Durham Region Transit, York Region Transit (YRT)/Viva, MiWay, Brampton Transit, Oakville Transit, Burlington Transit, Hamilton Street Railway</p>
+      <p>Designed by Jeff Allen</p>
+    </div>
+
 
   </div>
 
@@ -770,6 +1107,7 @@ var map = new mapboxgl.Map({
     bearing: -17,
     maxZoom: 13,
     minZoom: 8,
+    attributionControl: false,
 });
 
 
@@ -1294,7 +1632,7 @@ map.on('load', function() {
    });
 
 // maybe add a control in the future
-//map.addControl(new mapboxgl.Navigation({position: 'top-left'}));
+map.addControl(new mapboxgl.Navigation({position: 'top-left'}));
 
 </script>
 
