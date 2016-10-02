@@ -1,4 +1,4 @@
-### Linear Heatmaps of Student Travel Patterns in the Toronto Region
+## Linear Heatmaps of Student Travel Patterns in the Toronto Region
 [ Jeff Allen, 2016 ]
 
 https://sausy-lab.github.io/SMTO_web_map/
