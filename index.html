@@ -3,6 +3,9 @@
 <head>
     <meta charset='utf-8' />
     <title>SMTO Map</title>
+    <meta name="description" content="Interactive Map of Student Travel in Toronto">
+    <meta name="author" content="Jeff Allen">
+    <meta name="keywords" content="Map, Travel, Transit, Toronto, Transportation">
     <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
     <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.23.0/mapbox-gl.js'></script>
     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.23.0/mapbox-gl.css' rel='stylesheet' />
@@ -74,17 +77,17 @@
           opacity: 0.4;
         }
         #m_all {
-          opacity: 0.98;
+          opacity: 0.8;
 
         }
 
         #m_title {
           cursor: auto;
-          opacity: 0.8;
+          opacity: 0.99;
         }
 
         #m_bike:hover, #m_walk:hover, #m_transit:hover, #m_auto:hover, #m_all:hover {
-          opacity: 0.98;
+          opacity: 0.9;
         }
 
         #mode p {
@@ -97,7 +100,7 @@
         }
 
         #m_title p {
-          font-style: italic;
+          /*font-style: italic;*/
           font-size: 13px;
           color: white;
         }
@@ -106,7 +109,7 @@
           height:75px;
           width: 396px;
           background-color: grey;
-          margin-left: 6px;
+          margin-left: 2px;
           float: left;
           border-right: solid 1px grey;
           border-left: solid 1px grey;
@@ -134,22 +137,23 @@
         }
 
         #c_all {
-          opacity: 0.98;
+          opacity: 0.8;
         }
 
         #c_utm:hover, #c_utsc:hover, #c_utsg:hover, #c_yorkk:hover, #c_yorkg:hover, #c_title:hover, #c_ryers:hover, #c_ocad:hover, #c_all:hover {
-          opacity: 0.98;
+          opacity: 0.9;
         }
 
         #c_title p {
-          font-style: italic;
+          /*font-style: italic;*/
           font-size: 13px;
           color: white;
         }
 
         #c_title {
           cursor: auto;
-          opacity: 0.8;
+          opacity: 0.99;
+          /*background-color: darkgrey;*/
         }
 
         #utoronto_img {
@@ -993,8 +997,11 @@
       <div id='a_line'></div>
       <a id='a1' href="https://github.com/SAUSy-Lab/SMTO_web_map/blob/gh-pages/about_smto_heatmap.md" target="_blank">About This Map</a>
       <a id='a1' href='https://creativecommons.org/licenses/by-nc-sa/4.0/'target="_blank">CC BY-NC-SA 4.0</a>
-      <p id='a_p_t'>Sources: StudentMoveTO, <a href='https://www.mapbox.com/mapbox-gl-js/api/'target="_blank">Mapbox</a>, <a href='https://www.openstreetmap.org/#map=13/43.6616/-79.3796'target="_blank">OpenStreetMap</a>, OpenTripPlanner, Toronto Transit Commission, GO Transit, Durham Region Transit, York Region Transit (YRT)/Viva, MiWay, Brampton Transit, Oakville Transit, Burlington Transit, Hamilton Street Railway</p>
+      <p id='a_p_t'><i>Sources:</i> StudentMoveTO, <a href='https://www.mapbox.com/mapbox-gl-js/api/'target="_blank">Mapbox</a>, <a href='https://www.openstreetmap.org/#map=13/43.6616/-79.3796'target="_blank">OpenStreetMap</a>, OpenTripPlanner, Toronto Transit Commission, GO Transit, Durham Region Transit, York Region Transit (YRT)/Viva, MiWay, Brampton Transit, Oakville Transit, Burlington Transit, Hamilton Street Railway</p>
+      <p><i>Note:</i> The routes displayed are not exact. They are estimated using network which returns the path of shortest travel time from a home location to campus location.</p>
       <p>Designed by Jeff Allen</p>
+
+
 
     </div>
 
