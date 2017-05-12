@@ -10,7 +10,9 @@
     <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.23.0/mapbox-gl.js'></script>
     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.23.0/mapbox-gl.css' rel='stylesheet' />
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
-
+      
+    
+    <!-- custom CSS including tweaking the mapbox CSS -->
     <style>
 
         body {
@@ -842,6 +844,7 @@
 
   <div id='bar'>
 
+      <!-- <p>Mode share bar -->
     <div id='modebar'>
 
       <p> Percent of trips by travel mode:</p>
@@ -860,6 +863,7 @@
 
     </div>
 
+    <!-- <p>travel time bars -->
     <div id='avg_tt'>
       <p> Average one-way trip travel time:</p>
       <div id='avg_tt_bar'></div>
@@ -888,6 +892,7 @@
       <div id='tictac'></div>
     </div>
 
+      <!--critical transit route bars-->
     <div id='routes'>
       <p> Critical transit routes:</p>
 
@@ -1128,18 +1133,19 @@ var map = new mapboxgl.Map({
 });
 
 
-// maybe useful to grab from
+// shortened arrays of mode and campus for referencin glater
 mode_list = ['auto','transit','bike','walk', 'all']
 campus_list = ['UTM','UTSG','UTSC','YorkK','YorkG','Ryers','OCAD']
 
-// for easy looping
+// length of the above
 mode_length = 5
 campus_length = 7
 
-// initial line colour
+// initial line colour = for when all modes are shown
 line_color = white
 
 // load two layers with all modes and all campuses
+    // loading the simplified layer for zoom level 10 and below
 map.on('load', function () {
     map.addSource("routes_simple_", {
         type: 'vector',
@@ -1177,6 +1183,7 @@ map.on('load', function () {
     });
 });
 
+    // detailed geometries for zoom level 10 and down
 map.on('load', function () {
     map.addSource("routes_complex", {
         type: 'vector',
@@ -1219,12 +1226,14 @@ map.on('load', function () {
     });
 });
 
-// initial array for whats on the map
+    
+// initial array for whats on the map - all modes + all campuses
 x = ['all','all']
 
-// switching between modes everything that goes along with it
+// function for switching between modes - called when the buttons are clicked
 function mode_switch(mode_button) {
-
+  
+  // settting what combo fo mode + campus to display
   x = [x[0], mode_button]
   for (var iii = 0; iii < 40; iii++) {
     if (duration_data[iii][0] == x[0] && duration_data[iii][1] == x[1]) {
@@ -1233,23 +1242,15 @@ function mode_switch(mode_button) {
     }
   }
 
-  // for duration bar widths
+  // for duration bar widths - scaling for number of pixels
   avg_dur = Math.round( (working_data[3] / 60) * 10) / 10
   med_dur = Math.round( (working_data[4] / 60) * 10) / 10
-  // console.log(avg_dur)
-  // console.log(med_dur)
   document.getElementById('med_tt_bar').style.width = String(Math.floor(med_dur * 3.3333333)) + 'px';
   document.getElementById('avg_tt_bar').style.width = String(Math.floor(avg_dur * 3.3333333)) + 'px';
-
   document.getElementById('med_p').innerHTML = '<p>' + String(med_dur) + ' mins</p>'
   document.getElementById('avg_p').innerHTML = '<p>' + String(avg_dur) + ' mins</p>'
 
-
-
-
-  // console.log(mode_button)
-  // map.setFilter('routes_simple_',["==", "mode", mode_button]);
-  // map.setFilter('routes_complex',["==", "mode", mode_button]);
+  // filtering the map by mode via Mapbox GL filtering
   campus_filter = map.getFilter('routes_simple_')[1]
   if (mode_button == 'all') {
     filter = [
@@ -1268,6 +1269,7 @@ function mode_switch(mode_button) {
   map.setFilter('routes_simple_',filter);
   map.setFilter('routes_complex',filter);
 
+   // setting styles if mode == auto
   if (mode_button == 'auto') {
     document.getElementById('routes').style.opacity = '0'
 
@@ -1300,7 +1302,7 @@ function mode_switch(mode_button) {
     document.getElementById('prbb').style.opacity = '0.6';
 
 
-  }
+  }    // setting styles if mode == all
   else if (mode_button == 'all') {
 
     document.getElementById('routes').style.opacity = '0'
@@ -1331,7 +1333,7 @@ function mode_switch(mode_button) {
     document.getElementById('prbt').style.opacity = '0.8';
     document.getElementById('prbw').style.opacity = '0.8';
     document.getElementById('prbb').style.opacity = '0.8';
-  }
+  }    // setting styles if mode == transit
   else if (mode_button == 'transit') {
 
     console.log(transit_routes[x[0]][0])
@@ -1406,7 +1408,7 @@ function mode_switch(mode_button) {
     document.getElementById('prbt').style.opacity = '1';
     document.getElementById('prbw').style.opacity = '0.6';
     document.getElementById('prbb').style.opacity = '0.6';
-  }
+  }    // setting styles if mode == walk
   else if (mode_button == 'walk') {
     document.getElementById('routes').style.opacity = '0'
 
@@ -1436,7 +1438,7 @@ function mode_switch(mode_button) {
     document.getElementById('prbt').style.opacity = '0.6';
     document.getElementById('prbw').style.opacity = '1';
     document.getElementById('prbb').style.opacity = '0.6';
-  }
+  }    // setting styles if mode == bike
   else if (mode_button == 'bike') {
     document.getElementById('routes').style.opacity = '0'
 
@@ -1470,7 +1472,7 @@ function mode_switch(mode_button) {
 
 }
 
-
+// data for mode shre for each campus - generated originally in R
 mode_share = {
   // auto, transit, walk, bike
   'all': [8, 62, 22, 8], //g
@@ -1485,7 +1487,8 @@ mode_share = {
 
 // switching campuses and everything that goes along with it
 function campus_switch(campus_button) {
-
+ 
+    // setting the combo of campus + mode to display
   x = [campus_button, x[1]]
   for (var iii = 0; iii < 40; iii++) {
     if (duration_data[iii][0] == x[0] && duration_data[iii][1] == x[1]) {
@@ -1494,6 +1497,7 @@ function campus_switch(campus_button) {
     }
   }
 
+  // displaying the data on the left bar
   console.log(transit_routes[campus_button][0])
   document.getElementById('r_1').style.width = String(transit_routes[x[0]][0][1] * 3 - 1) + "px"
   document.getElementById('r_2').style.width = String(transit_routes[x[0]][1][1] * 3 - 1) + "px"
@@ -1580,6 +1584,7 @@ function campus_switch(campus_button) {
   ca_ids = ['c_all','c_yorkk','c_utsg','c_utsc','c_yorkg','c_utm','c_ryers','c_ocad']
   ca_nms = ['all','YorkK','UTSG','UTSC','YorkG','UTM','Ryers','OCAD']
 
+  // mode share bar setting
   for (var qq = 0; qq < 8; qq++) {
     if (campus_button == ca_nms[qq]) {
       // changing opacity of buttons
@@ -1648,7 +1653,7 @@ map.on('load', function() {
         });
    });
 
-// maybe add a control in the future
+// add a control in the future
 map.addControl(new mapboxgl.Navigation({position: 'top-left'}));
 
 </script>
